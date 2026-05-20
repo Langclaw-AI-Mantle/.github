@@ -1,243 +1,269 @@
 # Langclaw
 
-**Autonomous AI research platform for verifiable trend intelligence on 0G.**
+**Mantle-first AI alpha, data, and strategy intelligence.**
 
-Langclaw is a wallet-authenticated agent platform: chat, memory, API keys, prepaid usage billing, scheduled automation, and an OpenAI-compatible proxy to **0G Compute Router**. Enter one topic and Langclaw turns it into live X, GitHub, Docs, and HackQuest signals through coordinated agents, stores evidence on **0G Storage**, and anchors brief hashes on **0G Chain**.
+Langclaw is a wallet-authenticated AI agent workspace for Mantle. It analyzes smart-money flow, liquidity anomalies, protocol momentum, and DEX pair history, then turns the result into source-backed alpha briefs, watchlist signals, Dune-backed strategy backtests, paper-trading orders, and on-chain proof records.
 
-> **Two on-chain contracts on 0G mainnet:** `LangclawUsageVault` (prepaid deposits) and `LangclawRegistry` (research proof; Solidity artifact: `SignalGraphRegistry`).
+The current hackathon build is intentionally analysis-first. It does not execute live-funds trades. Strategy Lab produces backtests and deterministic paper-trade proofs so signals can be evaluated without custody or execution risk.
 
 ## Repositories
 
-Organization: [**Langclaw-AI**](https://github.com/Langclaw-AI)
+Organization: [Langclaw-AI-Mantle](https://github.com/Langclaw-AI-Mantle)
 
-| Repository                                            | Stack                                    | Port | README                                                                   |
-| ----------------------------------------------------- | ---------------------------------------- | ---- | ------------------------------------------------------------------------ |
-| [frontend](https://github.com/Langclaw-AI/frontend)   | Next.js 16, React 19, RainbowKit, AI SDK | 3000 | [README](https://github.com/Langclaw-AI/frontend/blob/master/README.md)  |
-| [backend](https://github.com/Langclaw-AI/backend)     | Node HTTP API, TypeScript, Supabase      | 3001 | [README](https://github.com/Langclaw-AI/backend/blob/main/README.md)     |
-| [contracts](https://github.com/Langclaw-AI/contracts) | Foundry, `LangclawUsageVault`            | —    | [README](https://github.com/Langclaw-AI/contracts/blob/master/README.md) |
+| Repository | Stack | Port | README |
+| --- | --- | --- | --- |
+| [frontend](https://github.com/Langclaw-AI-Mantle/frontend) | Next.js, React, RainbowKit, AI SDK | 3000 | [README](https://github.com/Langclaw-AI-Mantle/frontend/blob/main/README.md) |
+| [backend](https://github.com/Langclaw-AI-Mantle/backend) | Node HTTP API, TypeScript, Supabase, OpenAI, OpenClaw | 3001 | [README](https://github.com/Langclaw-AI-Mantle/backend/blob/main/README.md) |
+| [contracts](https://github.com/Langclaw-AI-Mantle/contracts) | Foundry, Solidity proof contracts | N/A | [README](https://github.com/Langclaw-AI-Mantle/contracts/blob/main/README.md) |
 
-This workspace can be a **monorepo** with `frontend/`, `backend/`, and `contracts/` as sibling folders, or three separate clones from the org above.
+This workspace can be run as a monorepo with `frontend/`, `backend/`, and `contracts/` as sibling folders, or as three separate clones from the organization above.
 
-## For judges / reviewers
+## What Langclaw Does
 
-**Fastest path (no local backend):** open the deployed app if your team shared a URL, connect an EVM wallet on **0G mainnet (chain ID `16661`)**, sign the Langclaw login message, open **Chat** in agent/research mode, and run a short topic (e.g. `0G decentralized storage trends`). Watch for **0G Compute**, **0G Storage**, and **0G Chain** badges in the agent trace when those envs are enabled on the server.
+| Area | What users get |
+| --- | --- |
+| Mantle Intelligence | Smart-money and holder-flow summaries, liquidity anomaly checks, TVL/yield momentum, evidence cards, confidence, risk notes, and source gaps |
+| Alpha Watchlist | Supabase-backed saved signals for follow-up monitoring |
+| Strategy Lab | Dune-backed Mantle Liquidity Momentum Strategy backtests, equity curve, trade table, win rate, drawdown, latest signal, and paper-trade opening |
+| Proof Center | Registry decision history and strategy proof records linked to the Langclaw ERC-8004 agent identity |
+| Usage billing | Internal MNT usage ledger with optional Mantle `LangclawUsageVault` deposit verification |
 
-**5-minute local smoke test**
+## For Judges And Reviewers
 
-1. `curl http://localhost:3001/health` → `{"ok":true,"service":"signalgraph-backend"}` (legacy service name in JSON)
-2. Open [http://localhost:3000](http://localhost:3000) → connect wallet → sign in
-3. Chat or `POST /api/discover` with a one-line topic (wallet session or `Authorization: Bearer lck_live_...`)
-4. Optional billing: send native **0G** to the vault below → `POST /api/usage/deposit/verify`
+Fast path:
 
-**Deployed contracts (0G mainnet, chain ID `16661`)**
+1. Open the deployed app, or run the local stack below.
+2. Connect an EVM wallet on Mantle mainnet, chain ID `5000`.
+3. Open Mantle Intelligence mode in chat.
+4. Run one of the demo prompts below.
+5. Inspect the evidence, source gaps, agent decision proof, Alpha Watchlist, Strategy Lab, and Proof Center.
 
-| Contract               | Address                                      | Explorer                                                                                                      |
-| ---------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **LangclawUsageVault** | `0xd6a6773d653049bc4076aac820f98bd48308596a` | [ChainScan](https://chainscan.0g.ai/address/0xd6a6773d653049bc4076aac820f98bd48308596a)                    |
-| **LangclawRegistry**   | Deploy with `npm run deploy:registry` in backend | Set `SIGNALGRAPH_REGISTRY_ADDRESS` in backend `.env` (env name is legacy; contract = research proof) |
+Demo prompts:
 
-**Getting 0G tokens**
+```text
+Analyze holder flow and smart-money signals on Mantle token 0x5d3a1Ff2b6BAb83b63cd9AD0787074081a52ef34
+```
 
-- Native **0G** (gas + vault deposits): buy on CEX and withdraw to 0G mainnet, bridge via [XSwap](https://xswap.link/bridge?toChain=16661), or swap on [0G Hub](https://hub.0g.ai/swap). See [How to get 0G](https://docs.0g.ai/introduction/how-to-get-0g).
-- **Compute Router** billing: create an API key and fund usage at [pc.0g.ai](https://pc.0g.ai) (`OG_COMPUTE_API_KEY` in backend `.env`).
+```text
+Detect liquidity anomaly on Mantle pair 0xeAfc4D6d4c3391Cd4Fc10c85D2f5f972d58C0dD5
+```
 
-**Minimum vs full local setup**
+```text
+Rank Mantle protocols by TVL and yield momentum
+```
 
-| Goal                         | Required env / tools                                                                 |
-| ---------------------------- | ------------------------------------------------------------------------------------ |
-| Chat + `/v1/*` 0G proxy      | `SUPABASE_*`, `LANGCLAW_API_KEY_PEPPER`, `OG_COMPUTE_API_KEY`                        |
-| Full research (`/api/discover`) | Above + [OpenClaw CLI](https://docs.openclaw.ai/install) + provider keys (Brave/GitHub/Tavily, etc.) |
-| On-chain proof (storage + registry) | `OG_STORAGE_*`, `OG_CHAIN_*`, `SIGNALGRAPH_REGISTRY_ADDRESS`, funded wallets        |
-| Prepaid usage vault          | `LANGCLAW_USAGE_VAULT_ADDRESS` = deployed vault above                                |
+Strategy Lab demo:
 
-Video walkthrough: [DEMO_SCRIPT.md](https://github.com/Langclaw-AI/backend/blob/main/docs/DEMO_SCRIPT.md).
+```text
+Open /strategy, select the sample Mantle DEX pair, provide a Dune query ID if the backend env does not set one, run a backtest, then open a paper trade from the latest signal.
+```
 
-## 0G integration
+## Deployed Proof Layer
 
-| 0G module            | Where Langclaw uses it                         | How it supports the product                                                                 |
-| -------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| **0G Compute Router** | `GET/POST /v1/*`, chat stream, research final answer | OpenAI-compatible inference on 0G models; primary writer for user-facing conclusions when configured |
-| **0G Storage**       | Research evidence bundles after `/api/discover` | Durable, decentralized proof artifacts linked from each brief                               |
-| **0G Chain**         | `LangclawRegistry.registerBrief`, `LangclawUsageVault` | On-chain brief hash + storage URI anchor; native 0G prepaid deposits for usage billing      |
+| Item | Value |
+| --- | --- |
+| Mantle chain ID | `5000` |
+| `LangclawRegistry` | `0xe69755e4249c4978c39fbe847ca9674ce7af3505` |
+| Registry deployment tx | `0xf6f8af14295c86d2f358c32ba15d0669903b122c086dcb0b432d9df8aaec6b6c` |
+| Optional `LangclawUsageVault` | `0x7e93Ef361e7b54297cF963977bA829E47E59e8E1` |
+| Usage vault deployment tx | `0xb60ed9019c5c8bb4c2b32c6a3e62e1edaf3b1530528d8151dfce08c1fd8b44e0` |
+| `LangclawTradingJournal` | Set `LANGCLAW_TRADING_JOURNAL_ADDRESS` after deployment |
+| ERC-8004 identity registry | `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` |
+| Langclaw ERC-8004 agent ID | `94` |
+| Agent owner / recorder | `0x2cA915EF6be8D2D48ccD3c5dAF715546AF873A4c` |
 
-Docs: [0G overview](https://docs.0g.ai/) · [Compute Router](https://docs.0g.ai/developer-hub/building-on-0g/compute-network/router/overview) · [Storage](https://docs.0g.ai/docs/concepts/storage) · [0G Chain](https://docs.0g.ai/docs/concepts/chain) · [Mainnet](https://docs.0g.ai/developer-hub/mainnet/mainnet-overview)
+Live decision proof examples:
 
-## Quick start
+| Decision | Signal | Transaction |
+| --- | --- | --- |
+| `0` | `smart-money` | `0x8a598de98fac01d53e696df67a9527de280c4d8cece72ccc4ced91164efa5187` |
+| `1` | `smart-money` | `0x39caaca5fe3a6792c427740342116f309ac02ee0a846c7dbe54f12c86a39a177` |
+| `2` | `liquidity-anomaly` | `0x9956a7574f6144ce831deac3275305939d65503366bc11bd922bc4783eeb5faf` |
 
-**Option A — monorepo (this layout)**
+Each `LangclawRegistry` decision stores the ERC-8004 `agentId`, Langclaw `runId`, deterministic `decisionHash`, evidence URI, signal type, recorder wallet, and block timestamp.
+
+## Mantle Data Sources
+
+| Source | Purpose |
+| --- | --- |
+| Etherscan-style API | Mantle chain reads with `chainid=5000` |
+| DEX Screener | Mantle DEX pair liquidity, price, and market context |
+| DeFiLlama | Mantle protocol TVL and yield context |
+| Dune | Historical rows for Strategy Lab backtests and pair scans |
+| Alchemy | Optional chain and token enrichment |
+| GoPlus | Optional token and security risk checks |
+| Brave, Tavily, GitHub | Optional supporting discovery for broader research context |
+
+Provider failures are shown as source gaps instead of hidden. The UI separates usable evidence from missing or unconfigured data sources.
+
+## Quick Start
+
+Backend:
 
 ```bash
-# 1. Backend
-cd backend && cp .env.example .env
-# Set SUPABASE_*, LANGCLAW_API_KEY_PEPPER, OG_COMPUTE_API_KEY at minimum
-# Optional: LANGCLAW_USAGE_VAULT_ADDRESS=0xd6a6773d653049bc4076aac820f98bd48308596a
+cd backend
+cp .env.example .env
 npm install
-# Apply Supabase migrations (see backend/supabase/migrations)
 npm run dev
-
-# 2. Frontend (new terminal)
-cd frontend && cp .env.example .env.local
-pnpm install && pnpm dev
 ```
 
-**Option B — three org repos (sibling folders)**
+Frontend:
 
 ```bash
-git clone https://github.com/Langclaw-AI/backend.git
-git clone https://github.com/Langclaw-AI/frontend.git
-git clone https://github.com/Langclaw-AI/contracts.git
+cd frontend
+cp .env.example .env.local
+pnpm install
+pnpm dev
 ```
 
-Then follow the same `backend` / `frontend` steps as above.
+Contracts:
+
+```bash
+cd contracts
+git submodule update --init
+forge build
+forge test
+```
+
+Smoke check:
 
 ```bash
 curl http://localhost:3001/health
-# {"ok":true,"service":"signalgraph-backend"}
+# {"ok":true,"service":"langclaw-backend"}
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Connect a wallet and sign the Langclaw login message.
+Open [http://localhost:3000](http://localhost:3000), connect a wallet, and sign the Langclaw login message.
+
+## Environment
+
+Core backend variables:
+
+```bash
+OPENAI_API_KEY=
+OPENAI_CHAT_MODEL=gpt-5-mini
+OPENAI_AGENT_MODEL=gpt-5.2
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+LANGCLAW_API_KEY_PEPPER=
+CORS_ORIGIN=http://localhost:3000
+```
+
+Mantle proof and data variables:
+
+```bash
+MANTLE_CHAIN_RPC_URL=https://rpc.mantle.xyz
+MANTLE_CHAIN_ID=5000
+MANTLE_PRIVATE_KEY=
+MANTLE_ERC8004_AGENT_ID=94
+LANGCLAW_REGISTRY_ADDRESS=0xe69755e4249c4978c39fbe847ca9674ce7af3505
+LANGCLAW_USAGE_VAULT_ADDRESS=0x7e93Ef361e7b54297cF963977bA829E47E59e8E1
+LANGCLAW_TRADING_JOURNAL_ADDRESS=
+MANTLE_TRADING_JOURNAL_ENABLED=false
+DUNE_API_KEY=
+DUNE_DEFAULT_QUERY_ID=
+DUNE_STRATEGY_QUERY_ID=
+ALCHEMY_API_KEY=
+ETHERSCAN_API_KEY=
+GOPLUS_API_KEY=
+GOPLUS_API_SECRET=
+```
+
+Frontend variable:
+
+```bash
+NEXT_PUBLIC_LANGCLAW_API_URL=http://localhost:3001
+```
+
+See the repo env templates for the full list:
+
+- [backend/.env.example](https://github.com/Langclaw-AI-Mantle/backend/blob/main/.env.example)
+- [frontend/.env.example](https://github.com/Langclaw-AI-Mantle/frontend/blob/main/.env.example)
+- [contracts/.env.example](https://github.com/Langclaw-AI-Mantle/contracts/blob/main/.env.example)
 
 ## Architecture
 
 ```text
-User → Frontend (:3000) → Backend API (:3001)
-                              ├─ Supabase (sessions, memory, keys, usage ledger)
-                              ├─ OpenClaw CLI (Planner, Trend, Evidence, Verifier, Conclusion)
-                              ├─ Providers (X/Brave, GitHub, Tavily, HackQuest)
-                              ├─ 0G Compute Router (/v1/*)
-                              ├─ 0G Storage (evidence bundles)
-                              ├─ LangclawRegistry (brief hash)
-                              └─ LangclawUsageVault (prepaid 0G deposits)
+User -> Frontend (:3000) -> Backend API (:3001)
+                              |-> Supabase: sessions, memory, API keys, usage ledger, watchlist
+                              |-> OpenClaw: planner, scorer, evidence, verifier
+                              |-> OpenAI Responses: chat and synthesis
+                              |-> Mantle data providers: Dune, DEX Screener, DeFiLlama, Alchemy, Etherscan, GoPlus
+                              |-> LangclawRegistry: agent decision proof
+                              |-> LangclawTradingJournal: strategy and paper-trade proof
+                              |-> LangclawUsageVault: optional MNT billing deposits
 ```
 
-### Research workflow
+## API Surface
 
-Entry: `runSignalGraphWorkflow(topic)` (internal name) → `POST /api/discover` or `/api/discover/stream` (NDJSON).
+Backend base URL defaults to `http://localhost:3001`.
 
-| Step               | Runtime                          | Responsibility                             |
-| ------------------ | -------------------------------- | ------------------------------------------ |
-| Planner            | OpenClaw                         | Search plan for X, GitHub, Docs, HackQuest |
-| Discovery          | TypeScript                       | Live source fetch (API keys server-side)   |
-| Source normalizer  | TypeScript                       | Source cards and excerpts                  |
-| Trend scorer       | OpenClaw                         | Rank trends                                |
-| Evidence packager  | OpenClaw                         | Claim map, bundle summary                  |
-| Verifier           | OpenClaw                         | Unsupported claims, brief hash input       |
-| Final conclusion   | 0G Compute → OpenClaw → fallback | User-facing answer                         |
-| 0G Storage / Chain | TypeScript                       | Upload bundle; `registerBrief` on registry   |
+| Area | Endpoints |
+| --- | --- |
+| Health | `GET /health` |
+| Chat | `POST /api/chat/stream`, `POST /api/chat/sessions` |
+| Mantle Intelligence | `POST /api/discover`, `POST /api/discover/stream` |
+| Strategy Lab | `POST /api/strategy/backtest`, `scan-pairs`, `paper-trade`, `runs` |
+| Wallet auth | `POST /api/wallet/challenge`, `POST /api/wallet/session` |
+| API keys | `POST /api/api-keys` |
+| Memory | `POST /api/memory`, `POST /api/memory/settings` |
+| Usage | `POST /api/usage/balance`, `quote`, `deposit/verify`, `withdraw/request` |
+| Automation | `POST /api/automation/*`, Telegram webhook |
 
-OpenClaw skills: [backend/openclaw/skills](https://github.com/Langclaw-AI/backend/tree/main/openclaw/skills). Install: [OpenClaw docs](https://docs.openclaw.ai/install).
+Full shapes: [API_REFERENCE.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/docs/API_REFERENCE.md).
 
-### Product features
+## Smart Contracts
 
-| Feature         | UI                   | API                                           |
-| --------------- | -------------------- | --------------------------------------------- |
-| Chat            | `/chat`              | `POST /api/chat/stream`, `/api/chat/sessions` |
-| Research        | Chat (agent mode)    | `POST /api/discover`, `/api/discover/stream`  |
-| Memory          | `/memory`            | `POST /api/memory`                            |
-| API keys        | `/key`               | `POST /api/api-keys`                          |
-| Usage / billing | `/usage`             | `POST /api/usage/*`                           |
-| Automation      | `/task`, `/settings` | `POST /api/automation/*`                      |
-| 0G models       | —                    | `GET/POST /v1/*` (alias `/api/0g/*`)          |
+| Contract | Purpose |
+| --- | --- |
+| `LangclawRegistry` | Records Mantle AI decision proofs and signal categories |
+| `LangclawTradingJournal` | Records Strategy Lab backtests and paper-trading outcomes |
+| `LangclawUsageVault` | Optional MNT billing vault for deposits and authorized withdrawals |
 
-## Authentication
+Deploy examples and contract details: [contracts README](https://github.com/Langclaw-AI-Mantle/contracts/blob/main/README.md).
 
-**Wallet session** — sign:
-
-```text
-Login to Langclaw
-Address: 0x...
-Time: 2026-05-16T12:00:00.000Z
-```
-
-Required for API key management, deposits, withdrawals.
-
-**API key** — `Authorization: Bearer lck_live_...` for runtime APIs. Cannot manage keys or withdraw.
-
-Full spec: [API_REFERENCE.md](https://github.com/Langclaw-AI/backend/blob/main/docs/API_REFERENCE.md).
-
-## Smart contracts (0G mainnet, chain ID `16661`)
-
-| Contract               | Repository / source                                                                                     | Purpose                                              |
-| ---------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **LangclawUsageVault** | [contracts](https://github.com/Langclaw-AI/contracts)                                                   | Native 0G deposits; backend-authorized withdrawals   |
-| **LangclawRegistry**   | [backend/contracts/SignalGraphRegistry.sol](https://github.com/Langclaw-AI/backend/blob/main/contracts/SignalGraphRegistry.sol) | `registerBrief(hash, storageUri)` for research proof |
-
-**Deployed (mainnet)**
-
-- **LangclawUsageVault:** `0xd6a6773d653049bc4076aac820f98bd48308596a` — [ChainScan](https://chainscan.0g.ai/address/0xd6a6773d653049bc4076aac820f98bd48308596a)
-
-**Billing flow:** user deposits 0G to vault → `POST /api/usage/deposit/verify` credits off-chain neuron balance → usage charges deduct ledger. Router (`OG_COMPUTE_API_KEY`) is funded separately on [pc.0g.ai](https://pc.0g.ai).
-
-**Withdrawal:** backend calls `authorizeWithdrawal` on vault (TBD: full automation); user calls `withdraw(amount)`.
-
-Deploy vault (if not using the address above):
+## Verification
 
 ```bash
-git clone https://github.com/Langclaw-AI/contracts.git && cd contracts
-export LANGCLAW_USAGE_VAULT_OWNER=0x...
-export LANGCLAW_USAGE_VAULT_WITHDRAWAL_AUTHORITY=0x...
-forge script script/DeployLangclawUsageVault.s.sol:DeployLangclawUsageVaultScript \
-  --rpc-url https://evmrpc.0g.ai --broadcast
+cd backend
+npm run typecheck
+npm test
 ```
-
-Deploy registry (in the [backend](https://github.com/Langclaw-AI/backend) repo):
 
 ```bash
-git clone https://github.com/Langclaw-AI/backend.git && cd backend
-npm run deploy:registry
+cd frontend
+pnpm typecheck
+pnpm build
 ```
 
-Set `LANGCLAW_USAGE_VAULT_ADDRESS` and `SIGNALGRAPH_REGISTRY_ADDRESS` in [backend `.env`](https://github.com/Langclaw-AI/backend/blob/main/.env.example).
+```bash
+cd contracts
+forge build
+forge test
+```
 
-## Deployment
+## Security Notes
 
-| Service  | Notes                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------ |
-| Frontend | Set `NEXT_PUBLIC_SIGNALGRAPH_API_URL` to public API (env name is legacy)                         |
-| Backend  | `npm run build && npm start`; `PORT` default 3001                                                |
-| Supabase | Apply [backend migrations](https://github.com/Langclaw-AI/backend/tree/main/supabase/migrations) |
-| 0G       | `OG_COMPUTE_API_KEY`, storage/chain keys as needed                                               |
-
-**Smoke tests after deploy**
-
-1. `GET /health`
-2. `GET /v1/models` with API key
-3. Wallet connect + chat stream
-4. `POST /api/discover` with short topic
-5. Deposit to vault + `POST /api/usage/deposit/verify`
-
-See env templates: [backend](https://github.com/Langclaw-AI/backend/blob/main/.env.example), [frontend](https://github.com/Langclaw-AI/frontend/blob/master/.env.example), [contracts](https://github.com/Langclaw-AI/contracts) (see deploy section in contracts README).
-
-## Security
-
-- Provider keys, Supabase service role, pepper, and `OG_*_PRIVATE_KEY` stay on the server only.
-- API keys stored as HMAC hashes (`LANGCLAW_API_KEY_PEPPER`).
-- Vault `withdrawalAuthority` is a hot wallet — use multisig for `owner` in production.
+- Keep provider keys, Supabase service role keys, API key pepper, and private keys on the backend only.
+- API keys are stored as HMAC hashes using `LANGCLAW_API_KEY_PEPPER`.
+- Use a dedicated recorder wallet for proof writes.
+- Use a multisig owner for production contract ownership.
 - Never commit `.env` files.
 
-Spec for vault requirements: [SMART_CONTRACT_TEAM_NOTES.md](https://github.com/Langclaw-AI/backend/blob/main/docs/SMART_CONTRACT_TEAM_NOTES.md).
+## Additional Docs
 
-## Prerequisites
-
-- Node.js 20+, pnpm (frontend), npm (backend)
-- Supabase project + applied migrations
-- Optional: [OpenClaw CLI](https://docs.openclaw.ai/install), [Foundry](https://book.getfoundry.sh/), 0G API keys and funded wallets
-
-## Additional docs ([backend](https://github.com/Langclaw-AI/backend))
-
-| Document                                                                                              | Description                    |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------ |
-| [API_REFERENCE.md](https://github.com/Langclaw-AI/backend/blob/main/docs/API_REFERENCE.md)            | Full HTTP API                  |
-| [SIGNALGRAPH_BLUEPRINT.md](https://github.com/Langclaw-AI/backend/blob/main/SIGNALGRAPH_BLUEPRINT.md) | Hackathon blueprint (legacy filename) |
-| [DEMO_SCRIPT.md](https://github.com/Langclaw-AI/backend/blob/main/docs/DEMO_SCRIPT.md)                | 3-minute demo script           |
-| [openclaw/README.md](https://github.com/Langclaw-AI/backend/blob/main/openclaw/README.md)             | OpenClaw workspace             |
+| Document | Description |
+| --- | --- |
+| [HACKATHON_SUBMISSION.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/docs/HACKATHON_SUBMISSION.md) | Submission summary and scoring coverage |
+| [DEMO_SCRIPT.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/docs/DEMO_SCRIPT.md) | 3 to 4 minute demo script |
+| [API_REFERENCE.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/docs/API_REFERENCE.md) | Backend API reference |
+| [LANGCLAW_BLUEPRINT.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/LANGCLAW_BLUEPRINT.md) | Mantle hackathon product blueprint |
+| [openclaw/README.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/openclaw/README.md) | OpenClaw workflow workspace |
 
 ## Links
 
-- GitHub: https://github.com/Langclaw-AI
-- 0G docs: https://docs.0g.ai/
-- 0G Compute Router: https://docs.0g.ai/developer-hub/building-on-0g/compute-network/router/overview
-- 0G APAC Hackathon: https://www.hackquest.io/hackathons/0G-APAC-Hackathon
+- GitHub: https://github.com/Langclaw-AI-Mantle
+- Mantle: https://www.mantle.xyz/
+- Mantle docs: https://docs.mantle.xyz/
 
 ## License
 
