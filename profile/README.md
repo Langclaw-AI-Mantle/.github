@@ -22,7 +22,7 @@ This workspace can be run as a monorepo with `frontend/`, `backend/`, and `contr
 
 | Area | What users get |
 | --- | --- |
-| Mantle Intelligence | Smart-money and holder-flow summaries, liquidity anomaly checks, TVL/yield momentum, evidence cards, confidence, risk notes, and source gaps |
+| Research (Mantle intelligence) | Smart-money and holder-flow summaries, liquidity anomaly checks, TVL/yield momentum, evidence cards, confidence, risk notes, and source gaps |
 | Alpha Watchlist | Supabase-backed saved signals for follow-up monitoring |
 | Strategy Lab | Dune-backed Mantle Liquidity Momentum Strategy backtests, equity curve, trade table, win rate, drawdown, latest signal, and paper-trade opening |
 | Proof Center | Registry decision history and strategy proof records linked to the Langclaw ERC-8004 agent identity |
@@ -34,7 +34,7 @@ Fast path:
 
 1. Open the deployed app, or run the local stack below.
 2. Connect an EVM wallet on Mantle mainnet, chain ID `5000`.
-3. Open Mantle Intelligence mode in chat.
+3. Select **Research** mode in chat (legacy `onchain` is aliased to Research).
 4. Run one of the demo prompts below.
 5. Inspect the evidence, source gaps, agent decision proof, Alpha Watchlist, Strategy Lab, and Proof Center.
 
@@ -67,7 +67,7 @@ Open /strategy, select the sample Mantle DEX pair, provide a Dune query ID if th
 | Registry deployment tx | `0xf6f8af14295c86d2f358c32ba15d0669903b122c086dcb0b432d9df8aaec6b6c` |
 | Optional `LangclawUsageVault` | `0x7e93Ef361e7b54297cF963977bA829E47E59e8E1` |
 | Usage vault deployment tx | `0xb60ed9019c5c8bb4c2b32c6a3e62e1edaf3b1530528d8151dfce08c1fd8b44e0` |
-| `LangclawTradingJournal` | Set `LANGCLAW_TRADING_JOURNAL_ADDRESS` after deployment |
+| `LangclawTradingJournal` | `0xe96e9b76af8c8f32bfa2235d647186826d92fb7d` |
 | ERC-8004 identity registry | `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` |
 | Langclaw ERC-8004 agent ID | `94` |
 | Agent owner / recorder | `0x2cA915EF6be8D2D48ccD3c5dAF715546AF873A4c` |
@@ -89,10 +89,13 @@ Each `LangclawRegistry` decision stores the ERC-8004 `agentId`, Langclaw `runId`
 | Etherscan-style API | Mantle chain reads with `chainid=5000` |
 | DEX Screener | Mantle DEX pair liquidity, price, and market context |
 | DeFiLlama | Mantle protocol TVL and yield context |
-| Dune | Historical rows for Strategy Lab backtests and pair scans |
+| Surf | Mantle-scoped smart-money and web research (API + optional CLI fallback) |
+| Elfa | Mantle-scoped narrative and sentiment context |
+| Nansen | Mantle smart-money netflow fallback |
+| Dune | Historical rows for Strategy Lab and row-level SQL fallback |
 | Alchemy | Optional chain and token enrichment |
 | GoPlus | Optional token and security risk checks |
-| Brave, Tavily, GitHub | Optional supporting discovery for broader research context |
+| Brave, Tavily, GitHub | Public discovery fallback for broader research context |
 
 Provider failures are shown as source gaps instead of hidden. The UI separates usable evidence from missing or unconfigured data sources.
 
@@ -157,8 +160,8 @@ MANTLE_PRIVATE_KEY=
 MANTLE_ERC8004_AGENT_ID=94
 LANGCLAW_REGISTRY_ADDRESS=0xe69755e4249c4978c39fbe847ca9674ce7af3505
 LANGCLAW_USAGE_VAULT_ADDRESS=0x7e93Ef361e7b54297cF963977bA829E47E59e8E1
-LANGCLAW_TRADING_JOURNAL_ADDRESS=
-MANTLE_TRADING_JOURNAL_ENABLED=false
+MANTLE_LANGCLAW_TRADING_JOURNAL_ADDRESS=0xe96e9b76af8c8f32bfa2235d647186826d92fb7d
+MANTLE_TRADING_JOURNAL_ENABLED=true
 DUNE_API_KEY=
 DUNE_DEFAULT_QUERY_ID=
 DUNE_STRATEGY_QUERY_ID=
@@ -185,12 +188,15 @@ See the repo env templates for the full list:
 ```text
 User -> Frontend (:3000) -> Backend API (:3001)
                               |-> Supabase: sessions, memory, API keys, usage ledger, watchlist
-                              |-> OpenClaw: planner, scorer, evidence, verifier
-                              |-> OpenAI Responses: chat and synthesis
-                              |-> Mantle data providers: Dune, DEX Screener, DeFiLlama, Alchemy, Etherscan, GoPlus
-                              |-> LangclawRegistry: agent decision proof
-                              |-> LangclawTradingJournal: strategy and paper-trade proof
-                              |-> LangclawUsageVault: optional MNT billing deposits
+                              |-> Research workflow:
+                              |     runtime probe -> planner -> discovery (TS)
+                              |     -> source normalizer (TS) -> trend scorer -> evidence -> verifier
+                              |     -> on-chain enrichment (TS) -> final conclusion
+                              |     -> evidence bundle -> LangclawRegistry proof
+                              |-> OpenClaw: planner, trend scorer, evidence, verifier, final conclusion
+                              |-> OpenAI Responses: direct chat and synthesis fallback
+                              |-> Mantle providers: Surf, Elfa, Nansen, Dune, DEX Screener, DeFiLlama, Alchemy, Etherscan, GoPlus
+                              |-> LangclawRegistry / LangclawTradingJournal / LangclawUsageVault
 ```
 
 ## API Surface
@@ -201,13 +207,15 @@ Backend base URL defaults to `http://localhost:3001`.
 | --- | --- |
 | Health | `GET /health` |
 | Chat | `POST /api/chat/stream`, `POST /api/chat/sessions` |
-| Mantle Intelligence | `POST /api/discover`, `POST /api/discover/stream` |
+| Research | `POST /api/discover`, `POST /api/discover/stream` |
 | Strategy Lab | `POST /api/strategy/backtest`, `scan-pairs`, `paper-trade`, `runs` |
+| Proof | `POST /api/proofs/readiness`, `POST /api/proofs/decisions` |
+| Watchlist | `POST /api/watchlist` |
 | Wallet auth | `POST /api/wallet/challenge`, `POST /api/wallet/session` |
 | API keys | `POST /api/api-keys` |
 | Memory | `POST /api/memory`, `POST /api/memory/settings` |
-| Usage | `POST /api/usage/balance`, `quote`, `deposit/verify`, `withdraw/request` |
-| Automation | `POST /api/automation/*`, Telegram webhook |
+| Usage | `POST /api/usage/balance`, `quote`, `vault`, `deposit/verify`, `withdraw/request` |
+| Automation | `POST /api/automation/*`, `POST /api/automation/webhooks/{slug}`, Telegram webhook |
 
 Full shapes: [API_REFERENCE.md](https://github.com/Langclaw-AI-Mantle/backend/blob/main/docs/API_REFERENCE.md).
 
